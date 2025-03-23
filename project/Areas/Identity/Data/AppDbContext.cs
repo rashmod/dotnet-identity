@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using project.Areas.Identity.Data;
+using project.Models;
 
 namespace project.Areas.Identity.Data;
 
@@ -13,6 +14,9 @@ public class AppDbContext : IdentityDbContext<AppUser>
     {
     }
 
+    public DbSet<Booking> Bookings { get; set; }
+    public DbSet<Vehicle> Vehicles { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -21,6 +25,18 @@ public class AppDbContext : IdentityDbContext<AppUser>
         // Add your customizations after calling base.OnModelCreating(builder);
 
         builder.ApplyConfiguration(new AppUserEntityConfiguration());
+
+        builder.Entity<Booking>()
+            .HasOne(b => b.User)
+            .WithMany()
+            .HasForeignKey(b => b.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Booking>()
+              .HasOne(b => b.Vehicle)
+              .WithMany(v => v.Bookings)
+              .HasForeignKey(b => b.VehicleId)
+              .OnDelete(DeleteBehavior.Cascade);
     }
 }
 
