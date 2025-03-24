@@ -7,15 +7,18 @@ using project.Services;
 
 namespace project.Controllers
 {
+    [Authorize]
     public class BookingController : Controller
     {
         private readonly IBookingService _bookingService;
+        private readonly IVehicleService _vehicleService;
         private readonly UserManager<AppUser> _userManager;
 
-        public BookingController(IBookingService bookingService, UserManager<AppUser> userManager)
+        public BookingController(IBookingService bookingService, IVehicleService vehicleService, UserManager<AppUser> userManager)
         {
             _bookingService = bookingService;
             _userManager = userManager;
+            _vehicleService = vehicleService;
         }
 
         public async Task<IActionResult> Index()
@@ -25,9 +28,13 @@ namespace project.Controllers
             return View(bookings);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int vehicleId)
         {
-            return View();
+            var vehicle = await _vehicleService.GetVehicleByIdAsync(vehicleId);
+            if (vehicle == null)
+                return NotFound();
+            var booking = new Booking { Vehicle = vehicle, VehicleId = vehicleId };
+            return View(booking);
         }
 
         [HttpPost]
@@ -45,6 +52,10 @@ namespace project.Controllers
                 }
                 return View(booking);
             }
+
+            var vehicle = _vehicleService.GetVehicleByIdAsync(booking.VehicleId);
+            if (vehicle == null)
+                NotFound();
 
             await _bookingService.CreateBookingAsync(booking);
 
