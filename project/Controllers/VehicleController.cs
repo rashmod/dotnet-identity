@@ -32,11 +32,13 @@ namespace project.Controllers
             return View(vehicle);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Vehicle vehicle)
