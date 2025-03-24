@@ -1,0 +1,62 @@
+﻿@model project.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<h1>Booking Details</h1>
+
+<div>
+    <h4>Booking Information</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+
+        <dt class="col-sm-2">
+            User
+        </dt>
+        <dd class="col-sm-10">
+            @Model.User?.UserName
+        </dd>
+    </dl>
+</div>
+
+@if (Model.Vehicle != null)
+{
+    <div>
+        <h4>Vehicle Details</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">Brand</dt>
+            <dd class="col-sm-10">@Model.Vehicle.Brand</dd>
+
+            <dt class="col-sm-2">Model</dt>
+            <dd class="col-sm-10">@Model.Vehicle.Model</dd>
+
+            <dt class="col-sm-2">Rental Price Per Day</dt>
+            <dd class="col-sm-10">$@Model.Vehicle.RentalPricePerDay</dd>
+
+            <dt class="col-sm-2">Availability</dt>
+            <dd class="col-sm-10">
+                @(Model.Vehicle.IsAvailable ? "Available" : "Not Available")
+            </dd>
+        </dl>
+    </div>
+}
+
+<div>
+    @* <a asp-action="Edit" asp-route-id="@Model?.BookingId" class="btn btn-primary">Edit</a> *@
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

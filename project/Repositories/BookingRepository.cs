@@ -23,7 +23,9 @@ namespace project.Repositories
         public async Task<Booking?> GetBookingByIdAsync(int id, string userId)
         {
             return await _context.Bookings
-                .FirstOrDefaultAsync(b => b.BookingId == id && b.UserId == userId);
+                .Where(b => b.BookingId == id && b.UserId == userId)
+                .Include(b => b.Vehicle)
+                .FirstOrDefaultAsync();
         }
 
         public async Task AddBookingAsync(Booking booking)

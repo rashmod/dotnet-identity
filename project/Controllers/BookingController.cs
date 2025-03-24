@@ -68,5 +68,19 @@ namespace project.Controllers
             await _bookingService.DeleteBookingAsync(id, userId);
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var userId = _userManager.GetUserId(User);
+            var booking = await _bookingService.GetUserBookingByIdAsync(id, userId);
+
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            return View(booking);
+        }
+
     }
 }
