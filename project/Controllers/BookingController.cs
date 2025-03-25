@@ -53,7 +53,7 @@ namespace project.Controllers
                 return View(booking);
             }
 
-            var vehicle = _vehicleService.GetVehicleByIdAsync(booking.VehicleId);
+            var vehicle = await _vehicleService.GetVehicleByIdAsync(booking.VehicleId);
             if (vehicle == null)
                 NotFound();
 
